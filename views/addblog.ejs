@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include("./particals/head") %>
+        <title>add new blog</title>
+</head>
+
+<body>
+    <%- include("./particals/nav") %>
+        <div class="container mt-5">
+            <form action="/blog" method="post" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="title" class="form-label">Title</label>
+                    <input type="text" name="title" class="form-control" id="title" aria-describedby="title">
+                </div>
+                <div class="mb-3">
+                    <label for="body">body</label>
+                    <textarea class="form-control" name="body" id="body" style="height: 100px"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="coverImageURL" class="form-label">CoverImageURL</label>
+                    <input 
+                    type="file" 
+                    name="coverImageURL" 
+                    class="form-control"
+                    id="coverImageURL"
+                    aria-describedby="coverImageURL">
+                </div>
+
+                <button class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+        <%- include("./particals/scripts") %>
+</body>
+
+</html>
