@@ -44,7 +44,7 @@ userSchema.pre("save", function (next) {
     next();
 })
 
-userSchema.static("matchPasswordAndGenerateToken", async function (email, password) {
+userSchema.statics.matchPasswordAndGenerateToken = async function (email, password) {
     const user = await this.findOne({ email })
     if (!user) throw new Error("User not found")
 
@@ -57,7 +57,7 @@ userSchema.static("matchPasswordAndGenerateToken", async function (email, passwo
 
     const token = createTokenForUser(user);
     return token;
-});
+};
 
 const User = model("User", userSchema)
 
