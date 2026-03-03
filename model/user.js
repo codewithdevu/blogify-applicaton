@@ -21,7 +21,7 @@ const userSchema = new Schema({
     },
     profileImageURL: {
         type: String,
-        default: "/image/defaultProfile.png"
+        default: "https://res.cloudinary.com/diwgfzk6b/image/upload/v1772568470/defaultProfile_ag9u14.png"
     },
     role: {
         type: String,
