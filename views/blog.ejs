@@ -38,12 +38,12 @@
 
     <div class="mt-3">
         <% comments.forEach(comment => { %>
-        <img src="<%= blog.createdBy.profileImageURL %>"  width="50px"><%= blog.createdBy.fullName %>
+        <img src="<%= comment.createdBy.profileImageURL %>"  width="50px"><%= comment.createdBy.fullName %>
         <pre class="mt-3"><%= comment.content %></pre>
         <% }) %>
     </div>
 
-        
+    
     <%- include("./particals/scripts") %>
 </body>
 
