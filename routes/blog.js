@@ -1,7 +1,8 @@
 import { Router } from "express";
 import cloudinary from "../config/cloudinary.js";
 import { Blog } from "../model/blog.js"
-import {comment} from "../model/comment.js";
+import { comment } from "../model/comment.js";
+import multer from "multer";
 
 const router = Router();
 
@@ -14,6 +15,11 @@ router.get("/add-new", (req, res) => {
 })
 
 router.post("/", upload.single("coverImageURL"), async (req, res) => {
+
+  if (!req.file) {
+    return res.status(400).send("Image is required");
+  }
+
   const { title, body } = req.body;
 
   const result = await new Promise((resolve, reject) => {
@@ -39,7 +45,7 @@ router.post("/", upload.single("coverImageURL"), async (req, res) => {
 
 router.get("/:id", async (req, res) => {
   const blog = await Blog.findById(req.params.id).populate("createdBy")
-  const comments = await comment.find({blogId: req.params.id}).populate("createdBy")
+  const comments = await comment.find({ blogId: req.params.id }).populate("createdBy")
 
   return res.render("blog", {
     user: req.user,
