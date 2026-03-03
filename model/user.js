@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose"
-import{ createHmac, randomBytes } from "crypto";
+const { createHmac, randomBytes } = await import('node:crypto');
 import {createTokenForUser} from  "../services/authenticaton.js"
 
 const userSchema = new Schema({
@@ -30,10 +30,10 @@ const userSchema = new Schema({
     },
 }, { timestamps: true })
 
-userSchema.pre("save", function (next) {
+userSchema.pre("save", function async () {
     const user = this;
 
-    if (!user.isModified("password")) return next();
+    if (!user.isModified("password")) return;
 
     const salt = randomBytes(16).toString("hex");
     const hashedPassword = createHmac("sha256", salt).update(user.password).digest("hex");
@@ -41,10 +41,9 @@ userSchema.pre("save", function (next) {
     this.salt = salt;
     this.password = hashedPassword;
 
-    next();
 })
 
-userSchema.statics.matchPasswordAndGenerateToken = async function (email, password) {
+userSchema.static("matchPasswordAndGenerateToken", async function (email, password) {
     const user = await this.findOne({ email })
     if (!user) throw new Error("User not found")
 
@@ -57,7 +56,7 @@ userSchema.statics.matchPasswordAndGenerateToken = async function (email, passwo
 
     const token = createTokenForUser(user);
     return token;
-};
+});
 
 const User = model("User", userSchema)
 
