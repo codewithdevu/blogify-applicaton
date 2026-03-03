@@ -1,23 +1,11 @@
 import { Router } from "express";
-import multer from "multer";
-import path from "path"
+import cloudinary from "../config/cloudinary.js";
 import { Blog } from "../model/blog.js"
 import {comment} from "../model/comment.js";
 
 const router = Router();
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, path.resolve("./public/uploads"));
-  },
-  filename: function (req, file, cb) {
-    const filename = `${Date.now()}-${file.originalname}`;
-    cb(null, filename);
-  },
-});
-
-const upload = multer({ storage: storage });
-
+const upload = multer({ storage: multer.memoryStorage() });
 
 router.get("/add-new", (req, res) => {
   return res.render("addblog", {
@@ -27,11 +15,23 @@ router.get("/add-new", (req, res) => {
 
 router.post("/", upload.single("coverImageURL"), async (req, res) => {
   const { title, body } = req.body;
+
+  const result = await new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      { folder: "blog_uploads" },
+      (error, result) => {
+        if (error) reject(error);
+        else resolve(result);
+      }
+    );
+    stream.end(req.file.buffer);
+  });
+
   const blog = await Blog.create({
     title,
     body,
     createdBy: req.user._id,
-    coverImageURL: `/uploads/${req.file.filename}`,
+    coverImageURL: result.secure_url,
   });
 
   return res.redirect(`/blog/${blog._id}`);
