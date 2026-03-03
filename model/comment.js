@@ -1,7 +1,7 @@
 import { Schema, model } from "mongoose"
 
 
-const coomentSchema = new Schema({
+const commentSchema = new Schema({
     content: {
         type: String,
         required: true,
@@ -9,7 +9,7 @@ const coomentSchema = new Schema({
     },
     blogId: {
         type: Schema.Types.ObjectId,
-        ref: "blog",
+        ref: "Blog",
     },
 
     createdBy: {
@@ -18,7 +18,7 @@ const coomentSchema = new Schema({
     },
 } , {timestamps: true});
 
-const comment = model("comment" , coomentSchema);
+const comment = model("comment" , commentSchema);
 
 export {
     comment,
