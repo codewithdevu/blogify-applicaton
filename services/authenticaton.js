@@ -6,6 +6,7 @@
         const payload = {
             _id: user._id,
             email: user.email,
+            fullName: user.fullName,
             profileImageURl: user.profileImageURl,
             role: user.role,
         };
